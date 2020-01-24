@@ -50,7 +50,7 @@ public class CloudstoreAcces extends AsyncTask<String, Integer, String> {
                     return;
                 }
                 for (int i = 0; i < jsonArray.length(); i++) {
-                    mData.add(jsonArray.get(i));
+                    mData.add(jsonArray.get(i).toString());
                 }
             } else {
                 JSONArray jsonArray = new JSONObject(aResponse).getJSONArray("messages");
