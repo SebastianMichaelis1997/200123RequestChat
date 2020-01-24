@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -41,7 +42,8 @@ public class CloudstoreAcces extends AsyncTask<String, Integer, String> {
 
     protected void onPostExecute(String aResponse) {
         try {
-            if (aResponse.startsWith("[", 0)) {
+            Object json = new JSONTokener(aResponse).nextValue();
+            if (json instanceof JSONArray) {
                 JSONArray jsonArray = new JSONArray(aResponse);
                 if (jsonArray.length() == 0) {
                     mData.add("Invalid User Key");
@@ -51,7 +53,7 @@ public class CloudstoreAcces extends AsyncTask<String, Integer, String> {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     mData.add(jsonArray.getJSONObject(i).getString("key"));
                 }
-            } else {
+            } else if (json instanceof JSONObject) {
                 JSONArray jsonArray = new JSONObject(aResponse).getJSONArray("messages");
                 if (jsonArray.length() == 0) {
                     mData.add("Invalid User Key");
