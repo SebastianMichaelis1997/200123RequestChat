@@ -37,14 +37,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        System.out.println("clicked");
         Intent i = new Intent(this, MessageAcitvity.class);
-        System.out.println("intent declared");
         String key = (String) mData.get(position);
-        System.out.println("got ky");
         i.putExtra("key", key);
-        System.out.println("gave extrra");
         startActivity(i);
-        System.out.println("activity");
     }
 }

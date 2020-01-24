@@ -20,9 +20,7 @@ public class MessageAcitvity extends AppCompatActivity {
         String key = getIntent().getStringExtra("key");
         mData = new ArrayList<Message>();
         mThis = this;
-        System.out.println("about ti fire");
-        new CloudstoreAcces(mData).execute("https://webtechlecture.appspot.com/cloudstore/get?owner=shortchat&key="+key);
-        System.out.println("fired");
+        new CloudstoreAcces(mData).execute("https://webtechlecture.appspot.com/cloudstore/get?owner=shortchat&key=" + key);
         mMyAdapter = new MyAdapter(mData);
         RecyclerView resiglerView = findViewById(R.id.recyclerView);
         resiglerView.setLayoutManager(new LinearLayoutManager(this));

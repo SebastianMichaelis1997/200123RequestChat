@@ -34,15 +34,14 @@ public class CloudstoreAcces extends AsyncTask<String, Integer, String> {
                 }
             } while (line != null);
         } catch (IOException e) {
-            return "Error";
+
         }
         return response;
     }
 
     protected void onPostExecute(String aResponse) {
         try {
-
-            if (aResponse.startsWith("[",0)) {
+            if (aResponse.startsWith("[", 0)) {
                 JSONArray jsonArray = new JSONArray(aResponse);
                 if (jsonArray.length() == 0) {
                     mData.add("Invalid User Key");
@@ -50,19 +49,25 @@ public class CloudstoreAcces extends AsyncTask<String, Integer, String> {
                     return;
                 }
                 for (int i = 0; i < jsonArray.length(); i++) {
-                    mData.add(jsonArray.get(i).toString());
+                    mData.add(jsonArray.getJSONObject(i).getString("key"));
                 }
             } else {
                 JSONArray jsonArray = new JSONObject(aResponse).getJSONArray("messages");
                 if (jsonArray.length() == 0) {
                     mData.add("Invalid User Key");
-                    MainActivity.mThis.dataSetChanged();
+                    MessageAcitvity.mThis.dataSetChanged();
                     return;
                 }
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject current = jsonArray.getJSONObject(i);
-                    mData.add(current.getString("key"));
+                    if (current.has("sender") && current.has("timestamp") && current.has("text")) {
+                        String from = current.getString("sender");
+                        String text = current.getString("text");
+                        String date = current.getString("timestamp");
+                        mData.add(new Message(from, date, text));
+                    }
                 }
+                MessageAcitvity.mThis.dataSetChanged();
             }
 
             MainActivity.mThis.dataSetChanged();
