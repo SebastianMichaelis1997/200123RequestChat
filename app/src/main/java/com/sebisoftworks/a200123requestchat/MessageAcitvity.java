@@ -1,6 +1,7 @@
 package com.sebisoftworks.a200123requestchat;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,7 +18,9 @@ public class MessageAcitvity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
+        TextView tv_name = findViewById(R.id.textView);
         String key = getIntent().getStringExtra("key");
+        tv_name.setText(key);
         mData = new ArrayList<Message>();
         mThis = this;
         new CloudstoreAcces(mData).execute("https://webtechlecture.appspot.com/cloudstore/get?owner=shortchat&key=" + key);
