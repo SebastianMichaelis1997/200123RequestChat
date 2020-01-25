@@ -44,6 +44,7 @@ public class CloudstoreAcces extends AsyncTask<String, Integer, String> {
         try {
             Object json = new JSONTokener(aResponse).nextValue();
             if (json instanceof JSONArray) {
+                //Response is list of users
                 JSONArray jsonArray = new JSONArray(aResponse);
                 if (jsonArray.length() == 0) {
                     mData.add("Invalid User Key");
@@ -54,6 +55,7 @@ public class CloudstoreAcces extends AsyncTask<String, Integer, String> {
                     mData.add(jsonArray.getJSONObject(i).getString("key"));
                 }
             } else if (json instanceof JSONObject) {
+                //Response is list of messages
                 JSONArray jsonArray = new JSONObject(aResponse).getJSONArray("messages");
                 if (jsonArray.length() == 0) {
                     mData.add("Invalid User Key");
