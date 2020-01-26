@@ -12,32 +12,33 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class CloudstoreAcces extends AsyncTask<String, Integer, String> {
-    ArrayList mData;
+    private ArrayList mData;
 
-    public CloudstoreAcces(ArrayList aData) {
+    CloudstoreAcces(ArrayList aData) {
         mData = aData;
     }
 
     @Override
     protected String doInBackground(String... strings) {
-        String response = "";
+        StringBuilder response = new StringBuilder();
         try {
             URL url = new URL(strings[0]);
             InputStreamReader inputStreamReader = new InputStreamReader(url.openStream());
             BufferedReader reader = new BufferedReader(inputStreamReader);
-            String line = null;
+            String line;
             do {
                 line = reader.readLine();
                 if (line != null) {
-                    response = response + line;
+                    response.append(line);
                 }
             } while (line != null);
-        } catch (IOException e) {
+        } catch (IOException ignored) {
 
         }
-        return response;
+        return response.toString();
     }
 
     protected void onPostExecute(String aResponse) {
@@ -68,7 +69,7 @@ public class CloudstoreAcces extends AsyncTask<String, Integer, String> {
                         String from = current.getString("sender");
                         String text = current.getString("text");
                         String date = current.getString("timestamp");
-                        mData.add(new Message(from, date, text));
+                        mData.add(new Message(from, new Date(Long.valueOf(date)), text));
                     }
                 }
                 MessageAcitvity.mThis.dataSetChanged();
