@@ -14,10 +14,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class CloudstoreAcces extends AsyncTask<String, Integer, String> {
+public class CloudscapeAccess extends AsyncTask<String, Integer, String> {
     private ArrayList mData;
 
-    CloudstoreAcces(ArrayList aData) {
+    CloudscapeAccess(ArrayList aData) {
         mData = aData;
     }
 

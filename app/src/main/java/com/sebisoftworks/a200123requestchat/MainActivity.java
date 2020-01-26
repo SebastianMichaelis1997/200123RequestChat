@@ -21,8 +21,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mThis = this;
-        mData = new ArrayList<String>();
-        CloudstoreAcces cl = new CloudstoreAcces(mData);
+        mData = new ArrayList<>();
+        CloudscapeAccess cl = new CloudscapeAccess(mData);
 
         mArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mData);
         ListView list = findViewById(R.id.list);
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent i = new Intent(this, MessageAcitvity.class);
-        String key = (String) mData.get(position);
+        String key = mData.get(position);
         i.putExtra("key", key);
         startActivity(i);
     }
