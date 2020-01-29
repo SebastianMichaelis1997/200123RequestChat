@@ -57,10 +57,12 @@ public class CloudscapeAccess extends AsyncTask<String, Integer, String> {
                 }
             } else if (json instanceof JSONObject) {
                 //Response is list of messages
-                JSONArray jsonArray = new JSONObject(aResponse).getJSONArray("messages");
+                JSONObject jsonObject = new JSONObject(aResponse);
+                if (!jsonObject.has("messages")) {
+                    return;
+                }
+                JSONArray jsonArray = jsonObject.getJSONArray("messages");
                 if (jsonArray.length() == 0) {
-                    mData.add("Invalid User Key");
-                    MessageAcitvity.mThis.dataSetChanged();
                     return;
                 }
                 for (int i = 0; i < jsonArray.length(); i++) {
