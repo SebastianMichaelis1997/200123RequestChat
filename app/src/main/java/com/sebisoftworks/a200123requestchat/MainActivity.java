@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setContentView(R.layout.activity_main);
         mThis = this;
         mData = new ArrayList<>();
-        CloudscapeAccess cl = new CloudscapeAccess(mData);
+        CloudscapeAccess cl = new CloudscapeAccess(mData, CloudscapeAccess.MODE_GET_KEYS);
 
         mArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mData);
         ListView list = findViewById(R.id.list);

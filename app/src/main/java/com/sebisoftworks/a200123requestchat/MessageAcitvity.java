@@ -23,7 +23,7 @@ public class MessageAcitvity extends AppCompatActivity {
         tv_name.setText(key);
         mData = new ArrayList<>();
         mThis = this;
-        new CloudscapeAccess(mData).execute("https://webtechlecture.appspot.com/cloudstore/get?owner=shortchat&key=" + key);
+        new CloudscapeAccess(mData, CloudscapeAccess.MODE_RETRIEVE_MESSAGE_LIST).execute("https://webtechlecture.appspot.com/cloudstore/get?owner=shortchat&key=" + key);
         mMyAdapter = new MyAdapter(mData);
         RecyclerView resiglerView = findViewById(R.id.recyclerView);
         resiglerView.setLayoutManager(new LinearLayoutManager(this));

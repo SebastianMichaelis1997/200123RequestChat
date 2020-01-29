@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,9 +15,13 @@ import java.util.Date;
 
 public class CloudscapeAccess extends AsyncTask<String, Integer, String> {
     private ArrayList mData;
+    public static final int MODE_GET_KEYS = 0;
+    public static final int MODE_RETRIEVE_MESSAGE_LIST = 1;
+    int mMode;
 
-    CloudscapeAccess(ArrayList aData) {
+    CloudscapeAccess(ArrayList aData, int mode) {
         mData = aData;
+        mMode = mode;
     }
 
     @Override
@@ -43,44 +46,49 @@ public class CloudscapeAccess extends AsyncTask<String, Integer, String> {
 
     protected void onPostExecute(String aResponse) {
         try {
-            Object json = new JSONTokener(aResponse).nextValue();
-            if (json instanceof JSONArray) {
-                //Response is list of users
-                JSONArray jsonArray = new JSONArray(aResponse);
-                if (jsonArray.length() == 0) {
-                    mData.add("Invalid User Key");
-                    MainActivity.mThis.dataSetChanged();
-                    return;
-                }
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    mData.add(jsonArray.getJSONObject(i).getString("key"));
-                }
-            } else if (json instanceof JSONObject) {
-                //Response is list of messages
-                JSONObject jsonObject = new JSONObject(aResponse);
-                if (!jsonObject.has("messages")) {
-                    return;
-                }
-                JSONArray jsonArray = jsonObject.getJSONArray("messages");
-                if (jsonArray.length() == 0) {
-                    return;
-                }
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject current = jsonArray.getJSONObject(i);
-                    if (current.has("sender") && current.has("timestamp") && current.has("text")) {
-                        String from = current.getString("sender");
-                        String text = current.getString("text");
-                        String date = current.getString("timestamp");
-                        mData.add(new Message(from, new Date(Long.valueOf(date)), text));
+            switch (mMode) {
+                case (MODE_GET_KEYS): {
+                    //Response is list of users
+                    JSONArray jsonArray = null;
+                    jsonArray = new JSONArray(aResponse);
+                    if (jsonArray.length() == 0) {
+                        mData.add("Invalid User Key");
+                        MainActivity.mThis.dataSetChanged();
+                        return;
                     }
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        mData.add(jsonArray.getJSONObject(i).getString("key"));
+                    }
+                    MessageAcitvity.mThis.dataSetChanged();
                 }
-                MessageAcitvity.mThis.dataSetChanged();
+                break;
+                case (MODE_RETRIEVE_MESSAGE_LIST): {
+                    //Response is list of messages
+                    JSONObject jsonObject = null;
+                    jsonObject = new JSONObject(aResponse);
+                    if (!jsonObject.has("messages")) {
+                        return;
+                    }
+                    JSONArray jsonArray = null;
+                    jsonArray = jsonObject.getJSONArray("messages");
+                    if (jsonArray.length() == 0) {
+                        return;
+                    }
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject current = null;
+                        current = jsonArray.getJSONObject(i);
+                        if (current.has("sender") && current.has("timestamp") && current.has("text")) {
+                            String from = current.getString("sender");
+                            String text = current.getString("text");
+                            String date = current.getString("timestamp");
+                            mData.add(new Message(from, new Date(Long.valueOf(date)), text));
+                        }
+                    }
+                    MessageAcitvity.mThis.dataSetChanged();
+                }
             }
-
-            MainActivity.mThis.dataSetChanged();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 }
