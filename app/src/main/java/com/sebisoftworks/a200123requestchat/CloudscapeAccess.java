@@ -38,8 +38,9 @@ public class CloudscapeAccess extends AsyncTask<String, Integer, String> {
                     response.append(line);
                 }
             } while (line != null);
-        } catch (IOException ignored) {
-
+            System.out.println("got response");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return response.toString();
     }
@@ -59,7 +60,7 @@ public class CloudscapeAccess extends AsyncTask<String, Integer, String> {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         mData.add(jsonArray.getJSONObject(i).getString("key"));
                     }
-                    MessageAcitvity.mThis.dataSetChanged();
+                    MainActivity.mThis.dataSetChanged();
                 }
                 break;
                 case (MODE_RETRIEVE_MESSAGE_LIST): {
